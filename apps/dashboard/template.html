@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Sports Intelligence: football forecasts</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f5f7fa;--panel:#fff;--panel2:#eef1f5;--text:#16202e;--muted:#5d6b7e;--line:#d9dfe7;--accent:#0f8b8d;--home:#2f6fdc;--draw:#8591a3;--away:#8a4fd6;--warn:#b86e00;--bad:#c0392b;--good:#1b8a5a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1117;--panel:#151b24;--panel2:#1c2430;--text:#e6edf5;--muted:#91a0b3;--line:#27313f;--accent:#38c3c5;--home:#5b9cff;--draw:#8b97a8;--away:#c08bff;--warn:#f0a63a;--bad:#ff7a6b;--good:#4fd39a}}
+:root[data-theme="dark"]{--bg:#0d1117;--panel:#151b24;--panel2:#1c2430;--text:#e6edf5;--muted:#91a0b3;--line:#27313f;--accent:#38c3c5;--home:#5b9cff;--draw:#8b97a8;--away:#c08bff;--warn:#f0a63a;--bad:#ff7a6b;--good:#4fd39a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--panel);border-bottom:1px solid var(--line)}
+.bar{max-width:1120px;margin:0 auto;padding:10px 16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.brand{font-weight:700;letter-spacing:.2px}.brand span{color:var(--accent)}
+nav{display:flex;gap:4px;flex-wrap:wrap;flex:1}nav a{padding:6px 10px;border-radius:8px;color:var(--muted)}nav a.on,nav a:hover{background:var(--panel2);color:var(--text);text-decoration:none}
+button{font:inherit;color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 10px;cursor:pointer}
+main{max-width:1120px;margin:0 auto;padding:18px 16px 60px}
+h1{font-size:26px;margin:6px 0 4px}h2{font-size:18px;margin:26px 0 10px}h3{font-size:15px;margin:0 0 8px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.grid{display:grid;gap:14px}.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}.g3{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}.g4{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.stat b{display:block;font-size:26px;line-height:1.15}.stat small,.muted{color:var(--muted)}small{font-size:12.5px}
+.alert{border:1px solid var(--warn);background:color-mix(in srgb,var(--warn) 12%,var(--panel));border-radius:12px;padding:12px 16px;margin:12px 0}
+.pbar{display:flex;height:26px;border-radius:7px;overflow:hidden;font-size:12px;font-weight:600;color:#fff}.pbar>div{display:flex;align-items:center;justify-content:center;min-width:2px;white-space:nowrap}
+.pbar.sm{height:14px;font-size:0;border-radius:5px}
+.H{background:var(--home)}.D{background:var(--draw)}.A{background:var(--away)}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:8px 8px;border-bottom:1px solid var(--line);vertical-align:middle}th{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;cursor:default;white-space:nowrap}th.s{cursor:pointer}
+tr.row{cursor:pointer}tr.row:hover td{background:var(--panel2)}.num{text-align:right;font-variant-numeric:tabular-nums}.sc{overflow-x:auto}
+.chip{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;border:1px solid var(--line);background:var(--panel2)}
+.c-high{color:var(--good)}.c-moderate{color:var(--accent)}.c-low{color:var(--warn)}.c-blocked{color:var(--bad)}
+.meter{height:8px;background:var(--panel2);border-radius:5px;overflow:hidden}.meter>i{display:block;height:100%;background:var(--accent)}
+.hm{display:grid;grid-template-columns:auto repeat(6,1fr);gap:3px;font-size:12px;font-variant-numeric:tabular-nums}.hm div{padding:6px 2px;text-align:center;border-radius:5px}.hm .ax{color:var(--muted);background:none}
+.teams{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.tn{font-size:24px;font-weight:700}.vs{color:var(--muted)}
+input[type=text]{font:inherit;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;max-width:340px}
+input[type=range]{width:100%;accent-color:var(--accent)}.sl{display:grid;grid-template-columns:150px 1fr 60px;gap:10px;align-items:center;margin:6px 0}
+.li{border-left:3px solid var(--line);padding:2px 0 2px 10px;margin:6px 0}.li.pos{border-color:var(--home)}.li.neg{border-color:var(--away)}
+svg text{fill:var(--muted);font-size:11px}svg .gl{stroke:var(--line)}
+footer{max-width:1120px;margin:0 auto;padding:0 16px 40px;color:var(--muted);font-size:12.5px}
+@media(max-width:560px){.sl{grid-template-columns:1fr 1fr 50px}.tn{font-size:19px}}
+</style></head><body>
+<header><div class="bar"><div class="brand">Sports <span>Intelligence</span></div><nav id="nav"></nav><button id="theme" aria-label="Toggle theme">Theme</button></div></header>
+<main id="app"></main>
+<footer>Probabilistic statistical estimates for analysis only. Not betting advice and no guarantee of outcomes. Forecasts reflect past results only: no lineup, injury, or news data is connected yet. 18+ if you use any forecast in connection with gambling; support in Germany: BZgA 0800&nbsp;1&nbsp;37&nbsp;27&nbsp;10.</footer>
+<script type="application/json" id="data">__DATA__</script>
+<script>
+const D = JSON.parse(document.getElementById('data').textContent), N = D.names, FX = D.fx, EV = D.ev, META = D.meta;
+const $ = (s, r = document) => r.querySelector(s), esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pc = (x, d = 1) => (100 * x).toFixed(d) + '%', f2 = x => x.toFixed(2), f4 = x => x.toFixed(4), sg = x => (x >= 0 ? '+' : '\u2212') + Math.abs(x).toFixed(1);
+const dt = s => new Date(s).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+const tm = s => new Date(s).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+const TEAM = Object.fromEntries(D.teams.map(t => [t.key, t]));
+const idx = id => FX.findIndex(f => f.id === id);
+/* ---------- model maths (port of services/prediction-engine; validated against Python in tests) ---------- */
+function scoreMatrix(lh, la, rho, max = 10) {
+  const pois = l => { const p = [Math.exp(-l)]; for (let k = 1; k <= max; k++) p.push(p[k - 1] * l / k); return p; };
+  const ph = pois(lh), pa = pois(la), m = ph.map(a => pa.map(b => a * b));
+  m[0][0] *= Math.max(1 - lh * la * rho, 1e-6); m[0][1] *= Math.max(1 + lh * rho, 1e-6); m[1][0] *= Math.max(1 + la * rho, 1e-6); m[1][1] *= Math.max(1 - rho, 1e-6);
+  const s = m.flat().reduce((a, b) => a + b, 0); return m.map(r => r.map(v => v / s));
+}
+function outcome(m) { let H = 0, Dr = 0, A = 0; m.forEach((r, h) => r.forEach((v, a) => { if (h > a) H += v; else if (h === a) Dr += v; else A += v; })); return [H, Dr, A]; }
+function scenario(f, c) {
+  const k = key => 1 + (c[key] || 0) / 100; let lh = f.lh * k('ha') * k('ac'), la = f.la * k('aa') * k('hc'); if (c.neutral) lh *= Math.exp(-f.hadv);
+  const d0 = outcome(scoreMatrix(f.lh, f.la, f.rho)), d1 = outcome(scoreMatrix(lh, la, f.rho)), w = f.w;
+  const raw0 = [0, 1, 2].map(i => w.elo * f.comp.elo[i] + w.dc * f.comp.dc[i] + w.gb * f.comp.gb[i]), raw1 = raw0.map((v, i) => v + w.dc * (d1[i] - d0[i]));
+  const n = a => { const s = a.reduce((x, y) => x + y, 0); return a.map(v => v / s); }; return { base: n(raw0), scen: n(raw1), lh, la };
+}
+/* ---------- small UI helpers ---------- */
+const bar = (p, cls = '') => `<div class="pbar ${cls}" role="img" aria-label="Home ${pc(p[0])}, draw ${pc(p[1])}, away ${pc(p[2])}">${['H','D','A'].map((c, i) => `<div class="${c}" style="width:${100 * p[i]}%">${cls ? '' : (p[i] > .09 ? pc(p[i], 0) : '')}</div>`).join('')}</div>`;
+const chip = c => `<span class="chip c-${c}">${c}</span>`;
+const meter = (v, label) => `<div style="margin:6px 0"><div style="display:flex;justify-content:space-between"><small>${label}</small><small>${f2(v)}</small></div><div class="meter"><i style="width:${100 * v}%"></i></div></div>`;
+function lineChart(series, labels, o = {}) {
+  const W = 640, H = 220, L = 38, R = 10, T = 10, B = 28, lo = o.min ?? 0, hi = o.max ?? 1, x = i => L + (labels.length < 2 ? (W - L - R) / 2 : i * (W - L - R) / (labels.length - 1)), y = v => T + (H - T - B) * (1 - (v - lo) / (hi - lo));
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${esc(o.label || 'chart')}">`;
+  for (let t = 0; t <= 4; t++) { const v = lo + (hi - lo) * t / 4; s += `<line class="gl" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text x="${L - 5}" y="${y(v) + 4}" text-anchor="end">${o.fmt ? o.fmt(v) : Math.round(100 * v) + '%'}</text>`; }
+  labels.forEach((l, i) => { if (labels.length < 9 || i % 2 === 0 || i === labels.length - 1) s += `<text x="${x(i)}" y="${H - 8}" text-anchor="middle">${esc(l)}</text>`; });
+  series.forEach(se => { s += `<polyline fill="none" stroke="var(${se.c})" stroke-width="2" points="${se.v.map((v, i) => x(i) + ',' + y(v)).join(' ')}"/>` + se.v.map((v, i) => `<circle cx="${x(i)}" cy="${y(v)}" r="2.6" fill="var(${se.c})"><title>${esc(se.n)} ${labels[i]}: ${o.fmt ? o.fmt(v) : pc(v)}</title></circle>`).join(''); });
+  return s + '</svg>' + `<div style="display:flex;gap:14px;flex-wrap:wrap">${series.map(se => `<small><span style="color:var(${se.c})">\u25CF</span> ${esc(se.n)}</small>`).join('')}</div>`;
+}
+const table = (heads, rows, cls = '') => `<div class="sc"><table class="${cls}"><thead><tr>${heads.map(h => `<th class="${h.cls || ''}" ${h.k ? `data-k="${h.k}"` : ''}>${h.t}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
+const fxRow = (f, i) => `<tr class="row" data-go="m${i}"><td>${dt(f.ko)} <small class="muted">${tm(f.ko)}</small></td><td><b>${esc(N[f.h])}</b> v <b>${esc(N[f.a])}</b></td><td style="min-width:150px">${f.pub ? bar(f.p, 'sm') : '<small class="muted">withheld</small>'}</td><td class="num">${f.pub ? pc(f.p[0], 0) + ' / ' + pc(f.p[1], 0) + ' / ' + pc(f.p[2], 0) : ''}</td><td>${chip(f.conf.level)}</td></tr>`;
+const fxHead = [{ t: 'Kick-off' }, { t: 'Match' }, { t: 'Forecast' }, { t: 'H / D / A', cls: 'num' }, { t: 'Confidence' }];
+/* ---------- pages ---------- */
+const PAGES = { home, matches, predictions, models, research };
+function home() {
+  const soon = FX.filter(f => f.pub && new Date(f.ko) <= new Date(new Date(FX[0].ko).getTime() + 7 * 864e5)), feat = soon.slice().sort((a, b) => (b.st.elo_h + b.st.elo_a) - (a.st.elo_h + a.st.elo_a))[0] || FX[0], fi = FX.indexOf(feat);
+  const t = EV.test, movers = FX.filter(f => f.hist.length > 1).map(f => ({ f, d: 100 * (f.hist[f.hist.length - 1].p[0] - f.hist[0].p[0]), first: f.hist[0].as_of })).sort((a, b) => Math.abs(b.d) - Math.abs(a.d)).slice(0, 5);
+  return `<h1>Football forecasting, with the receipts</h1><p class="muted" style="max-width:720px">Calibrated Premier League match probabilities from Elo and a time-decayed Poisson goal model, evaluated by walk-forward backtest on real results. Every number on this site comes from a model run, never from a language model.</p>
+  ${META.awaiting ? `<div class="alert"><b>Data gap:</b> the results feed stops at ${META.last_result}. ${META.awaiting} fixtures already past kick-off have no recorded result, so data quality is reduced and confidence is capped until the feed catches up.</div>` : ''}
+  <div class="grid g4"><div class="card stat"><small>Out-of-sample log loss</small><b>${f4(t.ensemble_raw.log_loss)}</b><small>vs ${f4(t.clim.log_loss)} for the always-guess-base-rates baseline</small></div>
+  <div class="card stat"><small>Matches evaluated (never tuned on)</small><b>${EV.n_test.toLocaleString('en-GB')}</b><small>${EV.test_from} to ${EV.test_to}</small></div>
+  <div class="card stat"><small>Outcome accuracy</small><b>${pc(t.ensemble_raw.accuracy)}</b><small>baseline ${pc(t.clim.accuracy)}</small></div>
+  <div class="card stat"><small>Upcoming fixtures forecast</small><b>${FX.filter(f => f.pub).length}</b><small>real fixtures, model ${esc(META.model)}</small></div></div>
+  <h2>Featured match</h2><div class="card" data-go="m${fi}" style="cursor:pointer"><div class="teams"><div class="tn">${esc(N[feat.h])}</div><div class="vs">${dt(feat.ko)} \u00B7 ${tm(feat.ko)}</div><div class="tn">${esc(N[feat.a])}</div></div><div style="margin:12px 0">${bar(feat.p)}</div><small class="muted">Expected goals ${f2(feat.lh)}\u2013${f2(feat.la)} \u00B7 confidence ${feat.conf.level} \u00B7 data quality ${f2(feat.dq)} \u00B7 <a href="#m${fi}">open match intelligence</a></small></div>
+  <div class="grid g2"><div><h2>Next fixtures</h2><div class="card">${table(fxHead, FX.slice(0, 8).map(fxRow))}<p><a href="#matches">All ${FX.length} fixtures</a></p></div></div>
+  <div><h2>Forecast changes since 20 Aug</h2><div class="card">${movers.map(m => `<div class="li ${m.d >= 0 ? 'pos' : 'neg'}" data-go="m${FX.indexOf(m.f)}" style="cursor:pointer"><b>${esc(N[m.f.h])} v ${esc(N[m.f.a])}</b><br><small>Home win ${pc(m.f.hist[0].p[0])} \u2192 ${pc(m.f.hist[m.f.hist.length - 1].p[0])} (${sg(m.d)}pp) after ${m.f.hist.length - 1} updates</small></div>`).join('')}<small class="muted">Reconstructed by refitting the model as of each past date, using only data available then.</small></div></div></div>`;
+}
+function matches() {
+  const q = (state.q || '').toLowerCase(), rows = FX.map((f, i) => [f, i]).filter(([f]) => !q || (N[f.h] + ' ' + N[f.a]).toLowerCase().includes(q));
+  return `<h1>Upcoming matches</h1><p class="muted">${FX.length} real fixtures from the current season. Select a match for the full analysis.</p><input type="text" id="q" placeholder="Filter by team\u2026" value="${esc(state.q || '')}" aria-label="Filter by team">
+  <div class="card" style="margin-top:12px">${table(fxHead, rows.slice(0, 120).map(([f, i]) => fxRow(f, i)))}${rows.length > 120 ? `<p class="muted">Showing 120 of ${rows.length}; refine the filter.</p>` : ''}</div>`;
+}
+function match(i) {
+  const f = FX[i]; if (!f) return '<p>Match not found.</p>'; const H = N[f.h], A = N[f.a], th = TEAM[f.h], ta = TEAM[f.a], iv = f.sim.iv, c = f.comp, w = f.w;
+  if (!f.pub) return `<h1>${esc(H)} v ${esc(A)}</h1><div class="alert"><b>Forecast withheld.</b> Data quality ${f2(f.dq)} is below the publication threshold. ${f.miss} recent results are missing.</div>`;
+  const rows = [['Elo rating model', c.elo, w.elo], ['Goal model (Dixon\u2013Coles)', c.dc, w.dc], ['Gradient boosting', c.gb, w.gb], ['Ensemble (published)', f.p, 1]];
+  const hist = f.hist, labels = hist.map(h => h.as_of.slice(5)), movedD = hist.length > 1 ? 100 * (hist[hist.length - 1].p[0] - hist[0].p[0]) : 0;
+  const lineage = hist.slice(1).reverse().filter(h => (h.lin || []).length).map(h => `<div style="margin:12px 0"><b>${h.as_of}</b> <span class="chip">${h.kind}</span> home win ${sg(h.lin[0].delta_home_pp)}pp ${h.lin.map(l => `<div class="li ${l.delta_home_pp >= 0 ? 'pos' : 'neg'}"><small>${esc(l.explanation)}</small></div>`).join('')}</div>`).join('');
+  return `<p><a href="#matches">\u2190 All matches</a></p><div class="teams"><div class="tn">${esc(H)}</div><div class="vs">${dt(f.ko)} \u00B7 ${tm(f.ko)} \u00B7 Premier League${f.md ? ' \u00B7 MD' + f.md : ''}</div><div class="tn">${esc(A)}</div></div>
+  <h2>Forecast</h2><div class="card">${bar(f.p)}<div class="grid g3" style="margin-top:12px">${['Home win', 'Draw', 'Away win'].map((l, k) => { const r = [iv.home, iv.draw, iv.away][k]; return `<div><b style="font-size:22px">${pc(f.p[k])}</b><br><small class="muted">${l} \u00B7 goal-model 90% range ${pc(r[0], 0)}\u2013${pc(r[1], 0)}</small></div>`; }).join('')}</div>
+  <p class="muted" style="margin:10px 0 0"><small>Probability and confidence are different things: confidence summarises data quality, parameter precision and model agreement; it is not a probability.</small></p></div>
+  <div class="grid g2"><div class="card"><h3>Confidence &amp; data quality</h3><p style="margin:0 0 8px"><b style="font-size:22px">${f.conf.level}</b> <small class="muted">score ${f2(f.conf.score)}</small> \u00B7 data quality <b>${f2(f.dq)}</b> <span class="chip">${f.band}</span></p>${meter(f.dqp.freshness, 'Freshness (30%)')}${meter(f.dqp.completeness, 'Completeness (25%)')}${meter(f.dqp.reliability, 'Source reliability (25%)')}${meter(f.dqp.entity, 'Entity resolution (10%)')}${meter(f.dqp.structural, 'Structural validity (10%)')}
+  <small class="muted">${f.miss ? f.miss + ' results for these teams are missing from the data source. ' : ''}No lineups, injuries or news are connected, so completeness is capped.</small></div>
+  <div class="card"><h3>Expected goals</h3><div class="teams"><div><b style="font-size:30px">${f2(f.lh)}</b><br><small class="muted">${esc(H)}</small></div><div class="vs">xG</div><div style="text-align:right"><b style="font-size:30px">${f2(f.la)}</b><br><small class="muted">${esc(A)}</small></div></div>
+  <p class="muted"><small>Model-expected goals from team attack/defence strength and home advantage (not shot-based xG, which the data source does not provide).</small></p><div class="grid g3"><div><small class="muted">Over 2.5</small><br><b>${pc(f.sim.o25, 0)}</b></div><div><small class="muted">Both score</small><br><b>${pc(f.sim.btts, 0)}</b></div><div><small class="muted">Simulations</small><br><b>${(f.sim.n / 1000).toFixed(0)}k</b></div></div></div></div>
+  <h2>Scoreline simulation</h2><div class="grid g2"><div class="card"><h3>Most likely scores (rows: ${esc(H)} goals)</h3>${heat(f.sim.mat)}</div><div class="card"><h3>Top scorelines</h3>${f.sim.top.map(s => `<div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:5px 0"><span>${esc(s.score)}</span><b>${pc(s.probability)}</b></div>`).join('')}<p class="muted"><small>${f.sim.n.toLocaleString('en-GB')} simulated matches, each first drawing a parameter set from ${f.sim.b} bootstrap refits of the goal model, so ranges reflect real parameter uncertainty.</small></p></div></div>
+  <h2>Model comparison &amp; disagreement</h2><div class="card">${table([{ t: 'Model' }, { t: 'Home', cls: 'num' }, { t: 'Draw', cls: 'num' }, { t: 'Away', cls: 'num' }, { t: 'Weight', cls: 'num' }, { t: '' }], rows.map(r => `<tr><td>${r[0]}</td><td class="num">${pc(r[1][0])}</td><td class="num">${pc(r[1][1])}</td><td class="num">${pc(r[1][2])}</td><td class="num">${r[0].startsWith('Ens') ? '' : pc(r[2], 0)}</td><td style="min-width:140px">${bar(r[1], 'sm')}</td></tr>`))}
+  <p>Disagreement: <b>${f4(f.dis)}</b> <small class="muted">(mean std-dev across models). Experimental: in the backtest it did not predict forecast error (Spearman ${EV.disagreement.spearman.toFixed(2)}, p=${EV.disagreement.p.toFixed(2)}), so treat it as informational.</small></p></div>
+  <h2>Prediction history</h2><div class="card">${hist.length > 1 ? lineChart([{ n: 'Home', v: hist.map(h => h.p[0]), c: '--home' }, { n: 'Draw', v: hist.map(h => h.p[1]), c: '--draw' }, { n: 'Away', v: hist.map(h => h.p[2]), c: '--away' }], labels, { min: 0, max: Math.min(1, Math.max(...hist.flatMap(h => h.p)) + .1), label: 'Forecast over time' }) + `<small class="muted">Snapshots are reconstructions: the model is refit as of each date using only results available then. Home-win probability moved ${sg(movedD)}pp overall.</small>` : '<p class="muted">No history for this fixture yet.</p>'}</div>
+  <h2>Why did the forecast change?</h2><div class="card">${lineage || '<p class="muted">No changes recorded.</p>'}<small class="muted">Component deltas are exact; the listed results are the evidence that entered the data, not a per-result causal attribution.</small></div>
+  ${availCard(f)}
+  <h2>Scenario analysis</h2><div class="card" id="scen">${scenHTML(f)}</div>
+  <h2>Team context</h2><div class="grid g2">${[th, ta].map(t => `<div class="card"><h3>${esc(t.name)}</h3><div class="grid g3"><div><small class="muted">Elo</small><br><b>${Math.round(t.elo)}</b></div><div><small class="muted">Attack / Defence</small><br><b>${sg(t.attack)}</b> / <b>${sg(t.defence)}</b></div><div><small class="muted">Last 5</small><br><b>${esc(t.form.split('').join(' '))}</b></div></div></div>`).join('')}</div>`;
+}
+function availCard(f) {
+  const A = D.avail, head = '<h2>Availability &amp; lineups</h2>';
+  if (!A || !A.summaries) return head + `<div class="card"><p class="muted" style="margin:0">No injury, suspension or lineup feed is connected to this build, so none of that information is in the forecast. When one is connected, availability appears here as a <b>suggested scenario</b> you can apply; it is never silently added to the published probabilities.</p></div>`;
+  const stale = (new Date(META.generated) - new Date(A.as_of)) / 36e5 > 48;
+  const side = k => { const s = A.summaries[k]; if (!s) return `<div><b>${esc(N[k])}</b><br><small class="muted">no data</small></div>`;
+    return `<div><b>${esc(N[k])}</b> <small class="muted">suggested: attack ${sg(s.attack_pct)}%, conceding ${sg(s.concede_pct)}%</small>${s.out.length ? s.out.slice(0, 5).map(o => `<div class="li"><small><b>${esc(o.name)}</b> (${o.pos}) ${o.status === 'd' ? 'doubtful' : o.status === 's' ? 'suspended' : 'out'}${o.chance != null ? ', ' + o.chance + '% chance' : ''}${o.news ? ' \u00B7 ' + esc(o.news) : ''}</small></div>`).join('') : '<br><small class="muted">no key absences flagged</small>'}</div>`; };
+  return head + `<div class="card">${stale ? '<div class="alert">Availability data is more than 48 hours old.</div>' : ''}<div class="grid g2">${side(f.h)}${side(f.a)}</div><p style="margin-bottom:0"><button data-apply="${f.h}|${f.a}">Apply as scenario</button> <small class="muted">Source: ${esc(A.source)}, ${esc(A.as_of.slice(0, 16).replace('T', ' '))} UTC. The size of each effect is an unvalidated assumption (no historical availability data exists to estimate it), so it is never applied to the published forecast.</small></p></div>`;
+}
+const heat = m => { const mx = Math.max(...m.flat()); return `<div class="hm"><div class="ax"></div>${[0,1,2,3,4,5].map(a => `<div class="ax">${a}</div>`).join('')}${m.map((r, h) => `<div class="ax">${h}</div>` + r.map(v => `<div style="background:color-mix(in srgb,var(--accent) ${Math.round(100 * v / mx)}%,var(--panel2));color:var(--text)">${(100 * v).toFixed(1)}</div>`).join('')).join('')}</div>`; };
+const SL = [['ha', 'Home attack'], ['aa', 'Away attack'], ['hc', 'Home goals conceded'], ['ac', 'Away goals conceded']];
+function scenHTML(f) {
+  return `<p class="muted" style="margin-top:0">Adjust a team\u2019s scoring or conceding rate. These are your <b>assumptions</b>, not estimates from player data (none is connected), applied to the goal model; the ensemble moves by that model\u2019s weight.</p>${SL.map(([k, l]) => `<div class="sl"><label for="s_${k}">${l}</label><input type="range" id="s_${k}" min="-30" max="30" step="1" value="${state.sc[k] || 0}" data-sc="${k}"><b id="v_${k}">${(state.sc[k] || 0) >= 0 ? "+" : "\u2212"}${Math.abs(state.sc[k] || 0)}%</b></div>`).join('')}<label><input type="checkbox" id="neu" ${state.sc.neutral ? 'checked' : ''}> Neutral venue (remove home advantage)</label><div id="scout" style="margin-top:12px">${scenOut(f)}</div>`;
+}
+function scenOut(f) {
+  const r = scenario(f, state.sc), d = r.scen.map((v, i) => 100 * (v - r.base[i]));
+  return `<div class="grid g2"><div><small class="muted">Baseline</small>${bar(r.base)}</div><div><small class="muted">Scenario (expected goals ${f2(r.lh)}\u2013${f2(r.la)})</small>${bar(r.scen)}</div></div><p style="margin-bottom:0">Change in percentage points: home <b>${sg(d[0])}</b> \u00B7 draw <b>${sg(d[1])}</b> \u00B7 away <b>${sg(d[2])}</b>. <small class="muted">The published forecast is never modified.</small></p>`;
+}
+function predictions() {
+  const rows = FX.map((f, i) => ({ f, i, d: f.hist.length > 1 ? 100 * (f.p[0] - f.hist[0].p[0]) : null })).filter(r => r.f.pub), k = state.sort || 'ko', dir = state.dir || 1;
+  const key = { ko: r => r.f.ko, h: r => r.f.p[0], d: r => r.f.p[1], a: r => r.f.p[2], c: r => r.f.conf.score, q: r => r.f.dq, g: r => r.f.dis, m: r => r.d ?? -999 }[k]; rows.sort((a, b) => (key(a) > key(b) ? 1 : -1) * dir);
+  return `<h1>Predictions</h1><p class="muted">All published forecasts. Click a column to sort.</p><div class="card">${table([{ t: 'Match', }, { t: 'Kick-off', k: 'ko', cls: 's' }, { t: 'Home', k: 'h', cls: 's num' }, { t: 'Draw', k: 'd', cls: 's num' }, { t: 'Away', k: 'a', cls: 's num' }, { t: 'Confidence', k: 'c', cls: 's' }, { t: 'Data quality', k: 'q', cls: 's num' }, { t: 'Disagreement', k: 'g', cls: 's num' }, { t: 'Moved (pp)', k: 'm', cls: 's num' }],
+    rows.slice(0, 150).map(({ f, i, d }) => `<tr class="row" data-go="m${i}"><td><b>${esc(N[f.h])}</b> v <b>${esc(N[f.a])}</b></td><td>${dt(f.ko)}</td><td class="num">${pc(f.p[0])}</td><td class="num">${pc(f.p[1])}</td><td class="num">${pc(f.p[2])}</td><td>${chip(f.conf.level)}</td><td class="num">${f2(f.dq)}</td><td class="num">${f4(f.dis)}</td><td class="num">${d === null ? '' : sg(d)}</td></tr>`))}</div><p class="muted"><small>Showing the first 150 of ${rows.length}. \u201CMoved\u201D compares the live forecast with the first reconstructed snapshot (20 Aug) for fixtures in the next two weeks.</small></p>`;
+}
+const MN = { clim: 'Base-rate baseline', elo: 'Elo', pois: 'Poisson goals', dc: 'Dixon\u2013Coles goals', gb: 'Gradient boosting', ensemble_raw: 'Ensemble (production)' };
+function models() {
+  const t = EV.test, v = EV.validation, w = META.weights, rel = EV.reliability, S = Object.keys(EV.seasons);
+  const relSvg = k => { const b = rel[k], W = 200, H = 200, p = v => 12 + v * (W - 24); return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Reliability ${k}"><line class="gl" x1="${p(0)}" y1="${H - p(0)}" x2="${p(1)}" y2="${H - p(1)}" stroke-dasharray="3 3"/>${b.map(x => `<circle cx="${p(x.predicted)}" cy="${H - p(x.observed)}" r="${Math.max(3, Math.min(8, Math.sqrt(x.n) / 3))}" fill="var(--accent)" opacity=".85"><title>predicted ${pc(x.predicted)}, observed ${pc(x.observed)}, n=${x.n}</title></circle>`).join('')}<text x="100" y="196" text-anchor="middle">predicted</text><text x="8" y="100" transform="rotate(-90 8 100)" text-anchor="middle">observed</text></svg>`; };
+  return `<h1>Model performance</h1><p class="muted">Walk-forward backtest on real Premier League results. Models are refit monthly using only earlier matches. Hyper-parameters were tuned on 2014\u201315 to 2018\u201319 only; everything below is ${EV.n_test.toLocaleString('en-GB')} test matches from ${EV.test_from}. Lower log loss, Brier and RPS are better.</p>
+  <div class="card">${table([{ t: 'Model' }, { t: 'Log loss', cls: 'num' }, { t: 'Brier', cls: 'num' }, { t: 'RPS', cls: 'num' }, { t: 'Accuracy', cls: 'num' }, { t: 'Calib. error', cls: 'num' }, { t: 'Weight', cls: 'num' }], Object.keys(MN).map(k => `<tr ${k === 'ensemble_raw' ? 'style="font-weight:700"' : ''}><td>${MN[k]}</td><td class="num">${f4(t[k].log_loss)}</td><td class="num">${f4(t[k].brier)}</td><td class="num">${f4(t[k].rps)}</td><td class="num">${pc(t[k].accuracy)}</td><td class="num">${f4(t[k].ece)}</td><td class="num">${w[k] !== undefined ? pc(w[k], 0) : k === 'dc' ? pc(w.dc, 0) : ''}</td></tr>`))}</div>
+  <div class="grid g2"><div><h2>Log loss by season</h2><div class="card">${lineChart([{ n: 'Base rates', v: S.map(s => EV.seasons[s].clim), c: '--draw' }, { n: 'Elo', v: S.map(s => EV.seasons[s].elo), c: '--home' }, { n: 'Ensemble', v: S.map(s => EV.seasons[s].ensemble_raw), c: '--accent' }], S.map(s => s.slice(2, 4) + '/' + s.slice(5)), { min: .85, max: 1.15, fmt: x => x.toFixed(2), label: 'Log loss by season' })}<small class="muted">Seasons from 2014\u201315 (validation) onward; test starts 2019\u201320. The bad and good seasons are shown, not hidden.</small></div></div>
+  <div><h2>Calibration (test, ensemble)</h2><div class="card"><div class="grid g3">${['home', 'draw', 'away'].map(k => `<div><small class="muted">${k}</small>${relSvg(k)}</div>`).join('')}</div><small class="muted">Dots on the diagonal mean a stated 40% really happens ~40% of the time. Dot size = number of matches.</small></div></div></div>
+  <h2>Is the ensemble really better?</h2><div class="card">${table([{ t: 'Ensemble minus\u2026' }, { t: 'Log-loss difference', cls: 'num' }, { t: '95% interval', cls: 'num' }, { t: 'Verdict' }], Object.entries(EV.bootstrap_vs).map(([k, b]) => `<tr><td>${MN[k]}</td><td class="num">${b.mean.toFixed(4)}</td><td class="num">${b.lo.toFixed(4)} to ${b.hi.toFixed(4)}</td><td>${b.hi < 0 ? 'better (significant)' : b.lo > 0 ? 'worse' : 'no clear difference'}</td></tr>`))}<small class="muted">Paired bootstrap over matches. Negative means the ensemble has lower (better) log loss.</small></div>
+  <h2>Production model</h2><div class="card"><p style="margin:0">${esc(META.model)} \u00B7 weights learned on validation predictions: Elo ${pc(w.elo, 0)}, goal model ${pc(w.dc, 0)}, gradient boosting ${pc(w.gb, 0)}. Elo K=${META.tuned.elo.k}, home advantage ${META.tuned.elo.home_adv}, season regression ${META.tuned.elo.regress}; goal-model half-life ${META.tuned.dc.half_life_days} days, ridge ${META.tuned.dc.ridge}.</p></div>`;
+}
+function research() {
+  const t = EV.test, b = EV.bootstrap_vs, n = EV.newcomers, c = EV.calibration_check, dis = EV.disagreement;
+  return `<h1>Research notes</h1><p class="muted">What the backtest actually shows, including the parts that did not work. All figures are out-of-sample.</p>
+  <div class="grid g2"><div class="card"><h3>Dixon\u2013Coles vs plain Poisson</h3><p>Log loss ${f4(t.dc.log_loss)} vs ${f4(t.pois.log_loss)}: the low-score dependence term makes no measurable difference here (interval for the ensemble gap includes zero). Plain Poisson is sufficient on this data; the extra complexity has not earned its place.</p></div>
+  <div class="card"><h3>Gradient boosting</h3><p>Log loss ${f4(t.gb.log_loss)}, worse than Elo (${f4(t.elo.log_loss)}), and the learned ensemble weight is ${pc(META.weights.gb, 0)}. With only goals and Elo-style features it adds nothing. It may help once richer inputs (shot data, lineups) exist; it stays in the pool only so that happens automatically if it earns weight.</p></div>
+  <div class="card"><h3>Calibration layer</h3><p>A 3-parameter calibrator fitted on validation did not help on test (log loss ${f4(c.calibrated.log_loss)} vs ${f4(c.raw.log_loss)} uncalibrated; calibration error ${f4(c.calibrated.ece)} vs ${f4(c.raw.ece)}). It is disabled in production. That decision was made after viewing test results, so treat it as a disclosed judgement, not a pre-registered rule.</p></div>
+  <div class="card"><h3>Does model disagreement signal error?</h3><p>No: Spearman correlation between disagreement and per-match log loss is ${dis.spearman.toFixed(2)} (p=${dis.p.toFixed(2)}). Terciles of disagreement have log loss ${dis.terciles.map(x => x.log_loss.toFixed(3)).join(', ')}. It is displayed for transparency only and carries little weight in confidence.</p></div>
+  <div class="card"><h3>Newly promoted teams</h3><p>Matches involving sides with under 15 games of recent top-flight history (n=${n.newcomer_involved.n}) score ${f4(n.newcomer_involved.log_loss)} vs ${f4(n.established.log_loss)} for established sides, still beating the base-rate baseline (${f4(n.newcomer_involved.clim)}). So thin history lowers confidence but does not block a forecast. Connecting second-tier results would improve these cases.</p></div>
+  <div class="card"><h3>Data freshness</h3><p>The current results feed ends ${META.last_result}; ${META.awaiting} fixtures that should have been played have no result. The pipeline measures this and lowers data quality (and caps confidence) instead of silently forecasting from stale information.</p></div></div>
+  <h2>Method</h2><div class="card"><ul style="margin:0;padding-left:18px"><li><b>Data:</b> ${META.played.toLocaleString('en-GB')} real Premier League results, 2010\u201311 to now, from ${esc(META.source)}. 42 clubs resolved to canonical identities; every season validated (380 matches, 20 teams, weekday-consistent dates).</li><li><b>Elo:</b> goal-difference-scaled updates; ratings mapped to home/draw/away by an ordered-logit fitted only on past matches.</li><li><b>Goal model:</b> attack/defence/home-advantage Poisson fitted by weighted maximum likelihood with exponential time decay and ridge shrinkage, then a Dixon\u2013Coles low-score term.</li><li><b>Ensemble:</b> linear opinion pool; weights learned on validation predictions only.</li><li><b>Validation:</b> models refit monthly on strictly earlier matches; features proven leak-free (identical when all future results are deleted or corrupted).</li><li><b>Simulation:</b> Monte Carlo over bootstrap-refit parameter sets, so intervals reflect parameter uncertainty.</li></ul></div>
+  <h2>Not built yet</h2><div class="card"><p style="margin:0">Lineups, injuries, suspensions, international workload, structured news events, shot-based xG and second-tier data. Those schemas and a safe news-ingestion pipeline exist, but no live feed is connected, so none of those signals influences any forecast. Basic Elo and goals cannot know that a striker is injured; the scenario panel lets you express that as an assumption.</p></div>`;
+}
+/* ---------- router & events ---------- */
+const state = { page: 'home', sc: {}, q: '', sort: 'ko', dir: 1 };
+const NAV = [['home', 'Home'], ['matches', 'Matches'], ['predictions', 'Predictions'], ['models', 'Models'], ['research', 'Research']];
+function tokenOf(h) { return (h || '').replace(/^#\/?/, '').replace(/[^A-Za-z0-9_~.-]/g, '') || 'home'; }
+function render() {
+  const t = state.page, m = /^m(\d+)$/.exec(t), cur = m ? 'matches' : t;
+  $('#nav').innerHTML = NAV.map(([k, l]) => `<a href="#${k}" class="${k === cur ? 'on' : ''}">${l}</a>`).join('');
+  try { $('#app').innerHTML = m ? match(+m[1]) : (PAGES[t] || home)(); } catch (e) { $('#app').innerHTML = '<div class="alert">This page failed to render. Please reload.</div>'; console.error(e); }
+  window.scrollTo(0, 0);
+}
+function go(t) { if (t !== state.page) { state.page = t; if (!/^m/.test(t)) state.sc = {}; else state.sc = {}; } try { if (location.hash !== '#' + t) history.replaceState(null, '', '#' + t); } catch (e) {} render(); }
+document.addEventListener('click', e => { const ap = e.target.closest('[data-apply]'); if (ap && D.avail) { const [h, a] = ap.dataset.apply.split('|'), S = D.avail.summaries, c = v => Math.max(-30, Math.min(30, Math.round(v || 0))); state.sc = { ha: c(S[h] && S[h].attack_pct), hc: c(S[h] && S[h].concede_pct), aa: c(S[a] && S[a].attack_pct), ac: c(S[a] && S[a].concede_pct) }; render(); const sc = $('#scen'); if (sc && sc.scrollIntoView) sc.scrollIntoView(); return; } const g = e.target.closest('[data-go]'); if (g) { go(g.dataset.go); return; } const a = e.target.closest('nav a, a[href^="#"]'); if (a) { e.preventDefault(); go(tokenOf(a.getAttribute('href'))); return; }
+  const th = e.target.closest('th[data-k]'); if (th) { state.dir = state.sort === th.dataset.k ? -state.dir : 1; state.sort = th.dataset.k; render(); } });
+document.addEventListener('input', e => { const t = e.target;
+  if (t.id === 'q') { state.q = t.value; const p = t.selectionStart; render(); const n = $('#q'); n.focus(); n.setSelectionRange(p, p); }
+  if (t.dataset && t.dataset.sc) { state.sc[t.dataset.sc] = +t.value; $('#v_' + t.dataset.sc).textContent = (+t.value >= 0 ? '+' : '\u2212') + Math.abs(+t.value) + '%'; scUpdate(); }
+  if (t.id === 'neu') { state.sc.neutral = t.checked; scUpdate(); } });
+function scUpdate() { const m = /^m(\d+)$/.exec(state.page); if (m) $('#scout').innerHTML = scenOut(FX[+m[1]]); }
+window.addEventListener('hashchange', () => { const t = tokenOf(location.hash); if (t !== state.page) { state.page = t; state.sc = {}; render(); } });
+const root = document.documentElement; let th = 'dark'; try { th = localStorage.getItem('theme') || 'dark'; } catch (e) {} root.setAttribute('data-theme', th);
+$('#theme').onclick = () => { th = th === 'dark' ? 'light' : 'dark'; root.setAttribute('data-theme', th); try { localStorage.setItem('theme', th); } catch (e) {} };
+state.page = tokenOf(location.hash); render();
+</script></body></html>

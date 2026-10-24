@@ -1,0 +1,2 @@
+{ "allowlist": ["get_fixture", "get_prediction", "compare_models", "get_data_quality", "get_prediction_history", "run_scenario"],
+  "notes": "Implemented in services/prediction-engine/app/agent/tools.py. Arguments are validated by pydantic (scenario percentages bounded to +/-50). No SQL, shell or network tools exist." }

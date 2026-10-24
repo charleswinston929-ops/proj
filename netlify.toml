@@ -1,0 +1,14 @@
+# Static deploy of the pre-built dashboard (no build step on Netlify; `make ui` / the daily-refresh workflow rebuilds index.html).
+[build]
+  publish = "apps/dashboard"
+  command = "echo 'static site: dashboard is pre-built'"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer"
+    Permissions-Policy = "geolocation=(), camera=(), microphone=()"
+    Content-Security-Policy = "default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+    Cache-Control = "public, max-age=300"

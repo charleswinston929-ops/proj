@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+artifacts/app_data.json
+artifacts/snapshots.pkl
+node_modules/

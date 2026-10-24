@@ -1,0 +1,1 @@
+export default function Predictions(){return <main className="container"><div className="label">TRACK RECORD</div><h1>Predictions</h1><div className="card"><p>Prediction snapshots become the permanent audit trail when real fixtures are connected.</p><p className="muted">Production metrics: Brier score, log loss, calibration error and accuracy.</p></div></main>}
